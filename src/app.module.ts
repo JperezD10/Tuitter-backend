@@ -3,6 +3,9 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
+import { LikeModule } from './like/like.module';
+import { TuitModule } from './tuit/tuit.module';
+import { FollowModule } from './follow/follow.module';
 
 @Module({
   imports: [
@@ -19,6 +22,9 @@ import { CommonModule } from './common/common.module';
     }),
     AuthModule,
     CommonModule,
+    LikeModule,
+    TuitModule,
+    FollowModule,
   ],
 })
 export class AppModule {}
