@@ -1,21 +1,18 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserDto, LoginDto } from './dto';
 import {hashSync, compareSync} from 'bcrypt';
-import { BaseService } from 'src/common/services/base.service';
 import { AuthResponse, JwtPayload } from './interfaces';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
-export class AuthService extends BaseService {
+export class AuthService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
-  ) {
-    super();
-  }
+  ) {  }
 
   async createUser(createUserDto: CreateUserDto): Promise<AuthResponse> {
     try {
@@ -55,7 +52,10 @@ export class AuthService extends BaseService {
     return this.jwtService.sign(payload);
   }
 
-  async verifyToken(token: string) {
-    return this.jwtService.verify(token);
-  }
+  private handleErrors(error){
+    if(error.code === '23505') throw new BadRequestException(error.detail);
+
+    console.error(error)
+    throw new InternalServerErrorException('An error happened. Please talk with admins')
+}
 }

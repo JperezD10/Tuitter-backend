@@ -4,6 +4,7 @@ import { FollowController } from './follow.controller';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Follow } from './entities/follow.entity';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   controllers: [FollowController],
@@ -11,6 +12,8 @@ import { Follow } from './entities/follow.entity';
   imports:[
     ConfigModule,
     TypeOrmModule.forFeature([Follow]),
-  ]
+    AuthModule
+  ],
+  exports: [TypeOrmModule]
 })
 export class FollowModule {}

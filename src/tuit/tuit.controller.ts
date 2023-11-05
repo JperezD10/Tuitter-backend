@@ -1,34 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { TuitService } from './tuit.service';
 import { CreateTuitDto } from './dto/create-tuit.dto';
-import { UpdateTuitDto } from './dto/update-tuit.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('tuit')
 export class TuitController {
   constructor(private readonly tuitService: TuitService) {}
 
   @Post()
-  create(@Body() createTuitDto: CreateTuitDto) {
-    return this.tuitService.create(createTuitDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.tuitService.findAll();
+  async create(@Body() createTuitDto: CreateTuitDto) {
+    return await this.tuitService.create(createTuitDto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tuitService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTuitDto: UpdateTuitDto) {
-    return this.tuitService.update(+id, updateTuitDto);
+  async findOne(@Param('id', ParseIntPipe) idFollower: number) {
+    return await this.tuitService.findTuitFollowing(idFollower);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tuitService.remove(+id);
+  async removeTuit(@Param('id', ParseIntPipe) id: number) {
+    return await this.tuitService.removeTuit(id);
   }
 }

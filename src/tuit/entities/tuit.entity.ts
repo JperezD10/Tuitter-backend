@@ -1,15 +1,15 @@
 import { User } from "src/auth/entities/user.entity";
 import { TableEntity } from "src/common/models/TableEntity";
 import { Like } from "src/like/entities/like.entity";
-import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
 
 @Entity()
 export class Tuit extends TableEntity {
-    @Column('date')
+    @Column('timestamptz')
     date: Date;
 
     @Column('text')
-    description: string;
+    content: string;
 
     @ManyToOne(() => User, (user) => user.tuits)
     user: User;

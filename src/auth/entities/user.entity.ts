@@ -28,11 +28,9 @@ export class User extends TableEntity {
     likes: Like[];
 
     @ManyToMany(() => User, user => user.following)
-    @JoinTable()
     followers: User[];
 
     @ManyToMany(() => User, user => user.followers)
-    @JoinTable()
     following: User[];
 
 }
